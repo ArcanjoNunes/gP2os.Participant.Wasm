@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" StartReportEvent="_StartReport" ReportInfo.Created="07/06/2010 09:46:01" ReportInfo.Modified="09/12/2024 14:49:23" ReportInfo.CreatorVersion="2020.4.0.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+    // Globalization
+    private void _StartReport(object sender, EventArgs e)
+    {
+      // Translation Resource
+      string[] sResTitles = ((String)Report.GetParameterValue(&quot;resGlobalization&quot;)).Split(new Char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+      if (sResTitles.Length == 0) { return;}
+      
+      // Setup Fields
+      try{
+        Text1.Text = sResTitles[0];
+        Text3.Text = sResTitles[1];
+        Text5.Text = sResTitles[2];
+        Text17.Text = sResTitles[3];
+        Text18.Text = sResTitles[4];
+        Text11.Text = sResTitles[5];
+      } catch{}  
+    }
+
+  }
+}
+</ScriptText>
+  <Styles Name="Gray">
+    <Style Name="Title" Font="Arial, 12pt, style=Bold"/>
+    <Style Name="Header" Fill.Color="Gainsboro" Font="Arial, 10pt, style=Bold"/>
+    <Style Name="Group" Font="Arial, 10pt, style=Bold"/>
+    <Style Name="Data" Font="Arial, 10pt"/>
+    <Style Name="Footer" Fill.Color="Gainsboro" Font="Arial, 10pt"/>
+    <Style Name="EvenRows" Fill.Color="WhiteSmoke" Font="Arial, 10pt"/>
+  </Styles>
+  <Dictionary>
+    <TableDataSource Name="UserDataSchema" ReferenceName="shepOS.UserDataSchema" DataType="System.Int32" Enabled="true">
+      <Column Name="uds_Reference" DataType="System.Int32"/>
+      <Column Name="uds_DataSchemaCode" DataType="System.String"/>
+      <Column Name="uds_BusinessName" DataType="System.String"/>
+      <Column Name="uds_TradeName" DataType="System.String"/>
+      <Column Name="uds_DocumentNumber" DataType="System.String"/>
+      <Column Name="uds_Address" DataType="System.String"/>
+      <Column Name="uds_Number" DataType="System.Int32"/>
+      <Column Name="uds_Supplement" DataType="System.String"/>
+      <Column Name="uds_ZipCode" DataType="System.String"/>
+      <Column Name="uds_Neighborhood" DataType="System.String"/>
+      <Column Name="uds_City" DataType="System.String"/>
+      <Column Name="uds_StateAbbreviation" DataType="System.String"/>
+      <Column Name="uds_StateName" DataType="System.String"/>
+      <Column Name="uds_Phone" DataType="System.String"/>
+      <Column Name="uds_CellPhone" DataType="System.String"/>
+      <Column Name="uds_EMail" DataType="System.String"/>
+      <Column Name="uds_HomePage" DataType="System.String"/>
+      <Column Name="uds_Language" DataType="System.Int32"/>
+      <Column Name="uds_FooterText" DataType="System.String"/>
+      <Column Name="uds_ReportTipoFile" DataType="System.String"/>
+      <Column Name="uds_HeaderStampFile" DataType="System.String"/>
+      <Column Name="uds_FooterStampFile" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="ReportMainTable" ReferenceName="shepOS.ReportMainTable" DataType="System.Int32" Enabled="true">
+      <Column Name="par_Reference" DataType="System.Int32"/>
+      <Column Name="par_Name" DataType="System.String"/>
+      <Column Name="par_NickName" DataType="System.String"/>
+      <Column Name="par_CellPhonePrivate" DataType="System.String"/>
+    </TableDataSource>
+    <Parameter Name="DataSchema" DataType="System.String"/>
+    <Parameter Name="resLanguageID" DataType="System.String"/>
+    <Parameter Name="UserID" DataType="System.String"/>
+    <Parameter Name="UserName" DataType="System.String"/>
+    <Parameter Name="inDate" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader1" Width="718.2" Height="75.6">
+      <TextObject Name="Text8" Left="103.95" Top="28.35" Width="170.1" Height="18.9" Text="[UserDataSchema.uds_DocumentNumber]" Font="Arial, 10pt"/>
+      <TextObject Name="Text1" Left="434.7" Top="9.45" Width="274.05" Height="56.7" Text="PARTICIPANT LISTING." HorzAlign="Right" VertAlign="Center" Font="Arial, 14pt, style=Bold"/>
+      <PictureObject Name="Picture1" Left="9.45" Width="85.05" Height="75.6"/>
+      <TextObject Name="Text7" Left="103.95" Width="321.3" Height="18.9" Text="[UserDataSchema.uds_TradeName]" Font="Arial, 14pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="99.38" Width="718.2" Height="18.9" Border.Lines="All" Border.Color="LightGray" Border.Width="0.5" EvenStyle="EvenRows" DataSource="ReportMainTable">
+      <TextObject Name="Text9" Left="75.6" Width="283.5" Height="18.9" Text="[ReportMainTable.par_Name]" VertAlign="Center" WordWrap="false" Font="Arial, 9pt"/>
+      <TextObject Name="Text4" Width="66.15" Height="18.9" Border.Lines="All" Border.Color="Transparent" Text="[ReportMainTable.par_Reference]" HorzAlign="Center" VertAlign="Center" WordWrap="false" Font="Arial, 9pt"/>
+      <TextObject Name="Text16" Left="368.55" Width="170.1" Height="18.9" Text="[ReportMainTable.par_NickName]" VertAlign="Center" WordWrap="false" Font="Arial, 9pt"/>
+      <TextObject Name="Text19" Left="538.65" Width="170.1" Height="18.9" Text="[ReportMainTable.par_CellPhonePrivate]" VertAlign="Center" WordWrap="false" Font="Arial, 9pt"/>
+      <DataHeaderBand Name="DataHeader1" Top="78.04" Width="718.2" Height="18.9" Fill.Color="WhiteSmoke" RepeatOnEveryPage="true">
+        <TextObject Name="Text3" Width="66.15" Height="18.9" Text="ID" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextFill.Color="Gray"/>
+        <TextObject Name="Text5" Left="75.6" Width="207.9" Height="18.9" Text="Name" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextFill.Color="Gray"/>
+        <TextObject Name="Text17" Left="368.55" Width="85.05" Height="18.9" Text="Nick Name" VertAlign="Center" WordWrap="false" Font="Arial, 8pt, style=Bold, Italic" TextFill.Color="Olive"/>
+        <TextObject Name="Text18" Left="538.65" Width="85.05" Height="18.9" Text="Phone" VertAlign="Center" WordWrap="false" Font="Arial, 7pt, style=Italic" TextFill.Color="Gray"/>
+      </DataHeaderBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="120.72" Width="718.2" Height="18.9" Border.Lines="Top" Border.Color="LightGray" Border.Width="0.5">
+      <TextObject Name="Text2" Left="481.95" Width="226.8" Height="18.9" Text="Página [Page] de [TotalPages#]" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+      <TextObject Name="Text6" Width="217.35" Height="18.9" Text="[inDate] - [DataSchema] - [UserName]" AutoWidth="true" VertAlign="Center" Font="Arial, 7pt" TextFill.Color="DarkGray"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

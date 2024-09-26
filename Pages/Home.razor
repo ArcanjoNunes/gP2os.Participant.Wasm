@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject IStringLocalizer<ResMessage> resMessage
+@inject CheckAuthToken _authToken
+@attribute [Authorize]
+
+<PageTitle>Dashboard</PageTitle>
+
+<h1>DASHBOARD</h1>
+
+<h5>@resMessage.GetString("msgWelcome")</h5>
+
+@code{
+    protected async override Task OnInitializedAsync()
+    {
+        if (await _authToken.CheckAuthenticationTokenAsync()) { return; }
+    }
+}

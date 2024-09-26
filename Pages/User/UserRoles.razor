@@ -1,0 +1,52 @@
+﻿@page "/dbc3014db4029b585c2cdffb37bf51d28c61505869b035b3e3d4ffee51b84feb"
+
+@inject SecurityAuthState authState
+
+<PageTitle>User Roles</PageTitle>
+
+<h1>USER ROLES</h1>
+
+<br />
+<br />
+
+<p>IsAuthenticated: @authState.isAuthenticated</p>
+<p>   IsAuthorized: @authState.isAuthorized</p>
+<p>LGPDCoordinator: @authState.isLGPD</p>
+
+<br />
+<br />
+@if (authState != null)
+{
+    <p>
+            Name: @authState.userName
+    </p>
+    <p>
+        NickName: @authState.givenName
+    </p>
+
+    <table>
+        <tr>
+            <td>
+                Claim Type
+            </td>
+            <td>
+                Claim Value
+            </td>
+        </tr>
+    @foreach (var claim in authState.Claims())
+    {
+        <tr>
+            <td>
+                @claim.Type
+            </td>
+            <td>
+                @claim.Value
+                @if (claim.Type == ClaimTypes.Role)
+                    {
+                         <h1> Role</h1>
+                    }
+                </td>
+        </tr>
+    }
+    </table>
+}

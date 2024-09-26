@@ -1,0 +1,14 @@
+﻿@inject gP2Navigation navigation
+@inject IStringLocalizer<ResMessage> resMessage
+<RadzenAlert Variant="Variant.Filled" AlertStyle="AlertStyle.Warning" Size="AlertSize.Medium" Shade="Shade.Light" AllowClose=false Visible="false">
+    @alertMessage
+</RadzenAlert>
+@code {
+    private string alertMessage { get; set; } = "";
+
+    protected override void OnInitialized()
+    {
+        alertMessage = resMessage.GetString("msgAccessDenied");
+        navigation.NavigateTo("/6054d812d4714c8afbbf2a3bdd6b9e97bc0d91e30fdab7b39b6d9ce8aa1d071f");
+    }
+}

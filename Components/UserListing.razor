@@ -1,0 +1,43 @@
+﻿@inject IUserApiRepository userRepository
+
+<PageTitle>User's Listing</PageTitle>
+
+<h1>Users</h1>
+
+@if (users == null)
+{
+        <p><em>Loading...</em></p>
+}
+else
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Reference</th>
+                    <th>Name</th>
+                    <th>PIC</th>
+                    <th>PIN</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in users)
+            {
+                        <tr>
+                            <td>@user.UsrdReference</td>
+                            <td>@user.UsrdName</td>
+                            <td>@user.UsrdPic</td>
+                            <td>@user.UsrdPin</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+
+@code {
+    private List<UserDirectory>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await userRepository.List();
+    }
+}

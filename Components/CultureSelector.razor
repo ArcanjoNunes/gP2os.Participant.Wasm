@@ -1,0 +1,60 @@
+﻿@inject IStringLocalizer<ResMessage> resMessage
+@inject gP2Navigation navigation
+@inject IJSRuntime jsRuntime
+
+<RadzenDropDown TValue="string" @bind-Value="@selectedValue" Data=@cultureTitles Change="SetSelected" />
+
+@* <select class="form-control" @bind="Culture" style="width:300px; margin-left:10px;">
+    @for(int i = 0; i<cultures.Length; i++)
+    {
+        <option value="@cultures[i]">@cultures[i].DisplayName. @culturesTitle[i]</option>
+    }
+</select>
+ *@
+
+@code {
+
+    private List<string>? cultureTitles { get; set; } = new List<string>();
+    private string? defaultValue { get; set; } = string.Empty;
+    private string? selectedValue { get; set; } = string.Empty;
+
+    string[] culturesTitle = new[]
+    {
+        "pt. Portugês BR",
+        "es. Español ES",
+        "en. English US"
+    };
+
+    protected override void OnInitialized()
+    {
+        defaultValue = selectedValue = SetDefaultTitle(CultureInfo.CurrentCulture.Name);
+
+        foreach (string cultureTitle in culturesTitle)
+        {
+            cultureTitles?.Add(cultureTitle);
+        }
+    }
+
+    protected void SetSelected()
+    {
+        selectedValue = selectedValue!.Substring(0, 2);
+        if (defaultValue != selectedValue)
+        {
+            var js = (IJSInProcessRuntime)jsRuntime;
+            js.InvokeVoid("gP2osCulture.set", selectedValue);
+            navigation.NavigateTo(navigation.Uri);
+        }
+    }
+
+    private string SetDefaultTitle(string cultureKey)
+    {
+        foreach(string cultureTitle in culturesTitle)
+        {
+            if (cultureKey == cultureTitle.Substring(0,2))
+            {
+                return cultureTitle;
+            }
+        }
+        return culturesTitle[0];
+    }
+}

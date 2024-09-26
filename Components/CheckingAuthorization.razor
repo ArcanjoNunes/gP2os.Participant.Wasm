@@ -1,0 +1,12 @@
+﻿@inject IStringLocalizer<ResMessage> resMessage
+<RadzenAlert Variant="Variant.Filled" AlertStyle="AlertStyle.Info" Size="AlertSize.Medium" Shade="Shade.Light" AllowClose=false>
+    @warningMessage
+</RadzenAlert>
+@code {
+    private string warningMessage { get; set; } = "";
+
+    protected override void OnInitialized()
+    {
+        warningMessage = resMessage.GetString("msgChckingAuthorization");
+    }
+}

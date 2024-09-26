@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="wrdName" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="wrdPhone" xml:space="preserve">
+    <value>Telefone</value>
+  </data>
+  <data name="wrdRecord" xml:space="preserve">
+    <value>Registro</value>
+  </data>
+  <data name="wrdSave" xml:space="preserve">
+    <value>Salva</value>
+  </data>
+  <data name="wrdCancel" xml:space="preserve">
+    <value>Cancela</value>
+  </data>
+  <data name="wrdReport" xml:space="preserve">
+    <value>Relatório</value>
+  </data>
+  <data name="wrdPrint" xml:space="preserve">
+    <value>Imprime</value>
+  </data>
+  <data name="msgConfirmTitle" xml:space="preserve">
+    <value>Confirmação</value>
+  </data>
+  <data name="wrdDelete" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="msgDeleteConfirmation" xml:space="preserve">
+    <value>Confirma a remoção deste registro?</value>
+  </data>
+  <data name="wrdSaved" xml:space="preserve">
+    <value>Salvo</value>
+  </data>
+  <data name="msgSearchOnFields" xml:space="preserve">
+    <value>Pesquisa por conteúdo</value>
+  </data>
+  <data name="wrdID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="wrdExport" xml:space="preserve">
+    <value>Exporta</value>
+  </data>
+  <data name="wrdAdd" xml:space="preserve">
+    <value>Inclui</value>
+  </data>
+  <data name="wrdSearchDot" xml:space="preserve">
+    <value>Busca...</value>
+  </data>
+  <data name="msgNoRecord" xml:space="preserve">
+    <value>Não há registro para mostrar.</value>
+  </data>
+  <data name="wrdFirstName" xml:space="preserve">
+    <value>Primeiro Nome</value>
+  </data>
+  <data name="wrdSurename" xml:space="preserve">
+    <value>Sobrenome</value>
+  </data>
+  <data name="wrdWait" xml:space="preserve">
+    <value>Aguarde</value>
+  </data>
+  <data name="wrdTitle" xml:space="preserve">
+    <value>Título/Descrição</value>
+  </data>
+  <data name="msgRequiredField" xml:space="preserve">
+    <value>Este campo é obrigatório.</value>
+  </data>
+  <data name="wrdReturn" xml:space="preserve">
+    <value>Retorno</value>
+  </data>
+  <data name="wrdPreviewReport" xml:space="preserve">
+    <value>Prever Relatório</value>
+  </data>
+  <data name="msgNotDeleted" xml:space="preserve">
+    <value>Não foi possível excluir este registro.</value>
+  </data>
+  <data name="wrdOk" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="msgRecordAvailable" xml:space="preserve">
+    <value>Registro já disponível</value>
+  </data>
+  <data name="msgRecordUnavailable" xml:space="preserve">
+    <value>Registro não está mais disponível</value>
+  </data>
+  <data name="wrdEdit" xml:space="preserve">
+    <value>Edita</value>
+  </data>
+  <data name="msgCannotSaveRecord" xml:space="preserve">
+    <value>Registro não pôde ser salvo.</value>
+  </data>
+  <data name="msgReloadRecord" xml:space="preserve">
+    <value>Registro alterado por outro usuário. Recarregue-o antes de alterar.</value>
+  </data>
+  <data name="wrdReload" xml:space="preserve">
+    <value>Recarregar</value>
+  </data>
+  <data name="wrdChoose" xml:space="preserve">
+    <value>Selecionar</value>
+  </data>
+  <data name="wrdPhoto" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="wrdIncorporationDate" xml:space="preserve">
+    <value>Data de Incorporação</value>
+  </data>
+  <data name="wrdMainOccupation" xml:space="preserve">
+    <value>Ocupação Princial</value>
+  </data>
+  <data name="wrdMonthlyIncome" xml:space="preserve">
+    <value>Contribuição Mensal</value>
+  </data>
+  <data name="wrdPEP" xml:space="preserve">
+    <value>PPE</value>
+  </data>
+  <data name="wrdPEPReason" xml:space="preserve">
+    <value>PPE - Motivo</value>
+  </data>
+  <data name="wrdReference" xml:space="preserve">
+    <value>Referência</value>
+  </data>
+  <data name="wrdBirthDate" xml:space="preserve">
+    <value>Data de Nacimento</value>
+  </data>
+  <data name="wrdAffiliarionMother" xml:space="preserve">
+    <value>Filiação: Nome da Mãe</value>
+  </data>
+  <data name="wrdPrivatePhone" xml:space="preserve">
+    <value>Celular Pessoal</value>
+  </data>
+  <data name="wrdInsertingRecord" xml:space="preserve">
+    <value>Registro Novo</value>
+  </data>
+  <data name="wrdUpdatingRecord" xml:space="preserve">
+    <value>Atualizando Registro</value>
+  </data>
+  <data name="wrdConfirmTitle" xml:space="preserve">
+    <value>Solicitando Confirmação.</value>
+  </data>
+  <data name="wrdgP2os" xml:space="preserve">
+    <value>gP2os</value>
+  </data>
+  <data name="wrdRecordContents" xml:space="preserve">
+    <value>Conteúdo do Registro</value>
+  </data>
+  <data name="msgWarningTitle" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="msgCheckCredential" xml:space="preserve">
+    <value>Verifica Credencial</value>
+  </data>
+  <data name="msgWelcome" xml:space="preserve">
+    <value>Bem-vindo.</value>
+  </data>
+  <data name="wrdCulture" xml:space="preserve">
+    <value>Cultura</value>
+  </data>
+  <data name="msgAccessDenied" xml:space="preserve">
+    <value>Acesso Negado.</value>
+  </data>
+  <data name="msgChckingAuthorization" xml:space="preserve">
+    <value>Verificando Autorização.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Acesso não autorizado. Revise as credenciais.</value>
+  </data>
+  <data name="wrdSystemKey" xml:space="preserve">
+    <value>gP2os</value>
+  </data>
+  <data name="msgDomainName" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="msgParticipantVersion" xml:space="preserve">
+    <value>V 1.0.0:001</value>
+  </data>
+</root>

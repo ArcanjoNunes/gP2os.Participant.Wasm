@@ -1,0 +1,13 @@
+﻿@page "/00270cf63f93c307e7e9d2cc7e639fa50aca58eeb64be3266a798c9c19535219"
+
+@inject gP2Navigation navigation
+@inject IUserApiRepository userRepository
+
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+        await userRepository.Logout();
+        navigation.NavigateTo("/6054d812d4714c8afbbf2a3bdd6b9e97bc0d91e30fdab7b39b6d9ce8aa1d071f");
+    }
+}

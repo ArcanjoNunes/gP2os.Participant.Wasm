@@ -1,0 +1,415 @@
+﻿@page "/1716a1884be0be0de75fe22d02e8e1d95c4a3f51063bbe98a5be4bf23ba2ce8a"
+
+@inject DialogService dialogService
+
+@inject gP2Navigation navigation
+
+@inject HelperAuthToken _helperToken
+@inject CheckAuthToken _authToken
+
+@inject IStringLocalizer<ResMessage> resMessage
+@inject IParticipantApiRepository _participantApi
+
+<PageTitle>Manage Participant</PageTitle>
+
+<RadzenStack Gap="0.2rem">
+    <RadzenCard>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenText Text="Participants" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                    <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddRecord" Variant="Variant.Flat" />
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenCard>
+        <RadzenRow AlignItems="AlignItems.Center" class="rz-mx-3">
+            <RadzenColumn SizeMD="11">
+            <RadzenTextBox @bind-Value="@search" Placeholder=@resMessage.GetString("wrdSearchDot") style="display: block; width: 100%"
+                            aria-label=@resMessage.GetString("wrdSearchWarning") />
+            </RadzenColumn>
+            <RadzenColumn SizeMD="1">
+                <RadzenButton ButtonStyle="ButtonStyle.Warning" Icon="search" Size="ButtonSize.Medium" style="display: block; width: 100%"
+                              Shade="Shade.Lighter" Variant="Radzen.Variant.Flat" class="rz-border-radius-3"
+                              Click="@Search" @onclick:stopPropagation="true" IsBusy="@isLoading" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenRow>
+        <RadzenColumn SizeMD="@sizeMD" >
+            <RadzenCard style="height: 100%; width: 100%">
+                <RadzenDataGrid @ref="gridParticipant" Data="@participants" TItem="Participant" @bind-Value=@selectedParticipants
+                                IsLoading="@isLoading" ColumnWidth="200px"
+                                AllowFiltering="false" FilterMode="FilterMode.Advanced" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+                                AllowPaging="true" PageSize="6" ShowPagingSummary="true" PagingSummaryFormat=@resMessage.GetString("msgPageSummary") 
+                                Count="@count" PagerAlwaysVisible="true" PagerHorizontalAlign="HorizontalAlign.Center"
+                                AllowSorting="true" Style="--rz-grid-selected-background-color: purple; --rz-grid-selected-color: white;"
+                                SelectionMode="DataGridSelectionMode.Single" 
+                                RowDoubleClick="@SelectRecord"
+                                @onclick:stopPropagation="true">
+                    <EmptyTemplate>
+                        <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Não há registro a ser mostrado.</p>
+                    </EmptyTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn Property="@nameof(participant.par_Reference)" Title="Reference"  />
+                        <RadzenDataGridColumn TItem="Participant" Property="par_Name" Title="Name" />
+                        <RadzenDataGridColumn TItem="Participant" Property="par_BirthDate" Title="Birth Date" FormatString="{0:d}" />
+                        <RadzenDataGridColumn TItem="Participant" Property="par_AffiliationMotherName" Title="Affiliation Mother Name" />
+                        <RadzenDataGridColumn TItem="Participant" Property="par_CellPhonePrivate" Title="Cell Phone Private" />
+                        <RadzenDataGridColumn TItem="Participant" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                            <Template Context="participant">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                                              Shade="Shade.Lighter" Variant="Variant.Flat"
+                                              Click=@(args => DeleteRecord(args, participant)) @onclick:stopPropagation="true" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn SizeMD="8">
+            <RadzenCard Visible="@showEditFrame">
+                <RadzenCard Class="rz-border-radius-2 rz-pb-1" Style="border: var(--rz-grid-cell-border);">
+                    <RadzenText Text="@editModeMessage" TextStyle="TextStyle.H5" style="text-align:right;" />
+                </RadzenCard>
+                <RadzenRow>
+                    <RadzenColumn SizeMD="6">
+                        <RadzenStack>
+                            <RadzenFormField Text="Name" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_Name" Name="par_Name" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="par Incorporation Date" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenDatePicker style="display: block; width: 100%" @bind-Value="@participant.par_IncorporationDate" Name="par_IncorporationDate"
+                                                        DateFormat="d" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Main Occupation" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_occReference" Name="par_occReferenc" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Monthly Income" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_MonthlyIncome" Name="par_MonthlyIncome" Format=",0.00" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="PEP" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_PEP" Name="par_PEP" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="PEP Reason" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_PEPReason" Name="par_PEPReason" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Legal Representative Name" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_LegalRepresentativeName" Name="par_LegalRepresentativeName" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Legal Representative Document" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_LegalRepresentativeDocument" Name="par_LegalRepresentativeDocument" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Contact Notes" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_ContactNotes" Name="par_ContactNotes" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Private Cell Phone" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_CellPhonePrivate" Name="par_CellPhonePrivate" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Business Phone" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_PhoneBusiness" Name="par_PhoneBusiness" />
+                                </ChildContent>
+                            </RadzenFormField>
+                        </RadzenStack>
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="6">
+                        <RadzenStack>
+                            <RadzenFormField Text="Gender" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_gtvGender" Name="par_gtvGender" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Birth Date" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenDatePicker style="display: block; width: 100%" @bind-Value="@participant.par_BirthDate" Name="par_BirthDate"
+                                                        DateFormat="d" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Birth Country" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_BirthcryReference" Name="par_BirthcryReference" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Birth City" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_BirthctyReference" Name="par_BirthctyReference" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Birth Foreign Place" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_BirthForeignPlace" Name="par_BirthForeignPlace" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Marital Status" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@participant.par_gtvMaritalStatus" Name="par_gtvMaritalStatus" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Spouse Name" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_SpouseName" Name="par_SpouseName" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Affiliation Father Name" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_AffiliationFatherName" Name="par_AffiliationFatherName" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="Affiliation Mother Name" Variant="Variant.Outlined" AllowFloatingLabel="false">
+                                <ChildContent>
+                                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@participant.par_AffiliationMotherName" Name="par_AffiliationMotherName" />
+                                </ChildContent>
+                            </RadzenFormField>
+                        </RadzenStack>
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenCard>
+                    <RadzenStack style="margin-top:0.1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="save" Text="Save" Variant="Variant.Flat" Click="@SaveRecord" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Cancel" Variant="Variant.Flat" Click="@CancelEdit" />
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn SizeMD="12" Visible="@showMessage" class="rz-mt-0 rz-p-0">
+            <RadzenCard>
+                <RadzenAlert Shade="Radzen.Shade.Dark" Variant="Radzen.Variant.Filled" Size="Radzen.AlertSize.Medium"
+                             AlertStyle="Radzen.AlertStyle.Danger" class="rz-p-0">
+                    @errorMessage
+                </RadzenAlert>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
+
+@code {
+
+    #region Setup
+
+    private IList<Participant>? selectedParticipants;
+    private List<Participant>? participants;
+    private Participant participant = new Participant();
+
+    private RadzenDataGrid<Participant>? gridParticipant;
+    private int sizeMD = 12;
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (await _authToken.CheckAuthenticationTokenAsync()) { return; }
+        await ReloadParticipants();
+    }
+
+    #endregion
+
+    #region Search Engine
+
+    protected string search = "";
+    protected async Task Search()
+    {
+        await ReloadParticipants(search);
+    }
+
+    protected async Task SelectAllParticipant()
+    {
+        await ReloadParticipants();
+    }
+
+    private async Task ReloadParticipants(string search = "")
+    {
+        isLoading = true;
+        participants = await _participantApi.SelectBySearchParticipant(search);
+        count = participants.Count;
+        isLoading = false;
+    }
+
+    #endregion
+
+    #region Grid Events
+
+    protected int count = 0;
+    protected bool isLoading = true;
+
+    // protected async Task GridListLoadData(LoadDataArgs args)
+    // {
+    //     ClearErrorMessage();
+    //     isLoading = true;
+    //     participants = await _participantApi.SelectBySearchParticipant(search);
+    //     if (participants[0].par_Reference == 0)
+    //     {
+    //         ShowErrorMessage(participants[0].par_Name);
+    //         return;
+    //     }
+    //     count = participants.Count();
+    //     isLoading = false;
+    // }
+
+    #endregion
+
+    #region CRUD Events
+
+    protected string editModeMessage = "";
+    protected bool isEditMode = true;
+    protected bool showEditFrame = false;
+
+    private void ChangeEditFrame(bool isEditing)
+    {
+        showEditFrame = isEditing;
+        sizeMD = isEditing ? 4 : 12;
+    }
+
+    protected void UpdateRecordContents(Participant participantRecord, bool isEditing)
+    {
+        ClearErrorMessage();
+        editModeMessage = isEditing ? resMessage.GetString("wrdUpdatingRecord")
+                                    : resMessage.GetString("wrdInsertingRecord");
+        isEditMode = isEditing;
+        participant = participantRecord;
+    }
+
+    protected void AddRecord(MouseEventArgs args)
+    {
+        selectedParticipants = null;
+        ChangeEditFrame(true);
+        UpdateRecordContents(new Participant(), false);
+    }
+
+    private void EditRecordEvents()
+    {
+        if (!checkSelected()) { return; }
+        ChangeEditFrame(true);
+        UpdateRecordContents(participant, true);
+    }
+
+    protected void EditRecord(Participant args)
+    {
+        EditRecordEvents();
+    }
+
+    protected void SelectRecord(DataGridRowMouseEventArgs<Participant> args)
+    {
+        EditRecordEvents();
+    }
+
+    protected async Task DeleteRecord(MouseEventArgs args, Participant participant)
+    {
+        if (!checkSelected()) { return; }
+        ClearErrorMessage();
+        if (await GetConfirmation())
+        {
+            var deleteResult = await _participantApi.DeleteParticipant(participant.par_Reference);
+            if (deleteResult.par_Reference == 0)
+            {
+                ShowErrorMessage(deleteResult.par_Name);
+                return;
+            }
+            await SelectAllParticipant();
+        }
+    }
+
+    protected async Task SaveRecord()
+    {
+        ClearErrorMessage();
+        var result = isEditMode ? await _participantApi.UpdateParticipant(participant)
+                                : await _participantApi.AddParticipant(participant);
+        if (result.par_Reference == 0)
+        {
+            ShowErrorMessage(result.par_Name);
+            return;
+        }
+        ChangeEditFrame(false);
+        await SelectAllParticipant();
+    }
+
+    protected void CancelEdit(MouseEventArgs args)
+    {
+        ChangeEditFrame(false);
+        ClearErrorMessage();
+    }
+
+    #endregion
+
+    #region Error Message
+
+    private bool showMessage = false;
+    private string errorMessage = "";
+
+    private void ShowErrorMessage(string errMessage)
+    {
+        errorMessage = errMessage;
+        showMessage = true;
+    }
+
+    private void ClearErrorMessage()
+    {
+        showMessage = false;
+        errorMessage = "";
+    }
+
+    #endregion
+
+    #region Check Selection
+
+    private bool checkSelected()
+    {
+        if ((selectedParticipants is not null) && (selectedParticipants.Count >= 1))
+        {
+            participant = selectedParticipants[0];
+            return true;
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Display Messages
+
+    private async Task ShowAlert(string errorMessage)
+    {
+        string sTitle = "gP2os. " + resMessage.GetString("msgWarningTitle");
+        AlertOptions oOptions = new()
+            {
+                OkButtonText = resMessage.GetString("wrdOk"),
+            };
+        await dialogService.Alert(errorMessage, sTitle, oOptions);
+    }
+
+    private async Task<bool> GetConfirmation(string messageDescription = "")
+    {
+        string sTitle = "gP2os. " + resMessage.GetString("msgConfirmTitle");
+        string sMessage = string.IsNullOrEmpty(messageDescription) ? resMessage.GetString("msgDeleteConfirmation")
+                                                                   : messageDescription;
+        ConfirmOptions oOptions = new()
+            {
+                CancelButtonText = resMessage.GetString("wrdCancel"),
+                OkButtonText = resMessage.GetString("wrdOk"),
+
+            };
+        return await dialogService.Confirm(sMessage, sTitle, oOptions) == true;
+    }
+
+    #endregion
+}

@@ -1,0 +1,108 @@
+@layout LoginLayout
+@page "/6054d812d4714c8afbbf2a3bdd6b9e97bc0d91e30fdab7b39b6d9ce8aa1d071f"
+@inject gP2Navigation navigation
+@inject IUserApiRepository userRepository
+@inject IStringLocalizer<ResMessage> resMessage
+@inject IStringLocalizer<ResUserLogin> resLocalizer
+<PageTitle>Access</PageTitle>
+<RadzenRow Gap="2rem" RowGap="2rem" class="rz-m-0 rz-m-md-2">
+    <RadzenColumn SizeMD="12">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.1rem" Wrap="FlexWrap.Wrap">
+            <RadzenText Text=@resLocalizer.GetString("msgTitle") TextStyle="Radzen.Blazor.TextStyle.H5" class="mb-4" TagName="Radzen.Blazor.TagName.H2" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="0.1rem" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text=@resLocalizer.GetString("msgPICTitle") Variant="Radzen.Variant.Outlined" Style="width: 100%" class="rz-p-2 rz-mt-0">
+                <Start>
+                    <RadzenIcon Icon="account_circle" />
+                </Start>
+                <ChildContent>
+                    <RadzenTextBox @bind-Value="@user.picCode" Style="width: 100%" Visible="@showPIC" />
+                    <RadzenPassword @bind-Value="@user.picCode" Style="width: 100%" Visible="@(!showPIC)" />
+                </ChildContent>
+                <End>
+                    <RadzenButton Icon="@(showPIC ? "visibility" : "visibility_off")" Click="ChangePICStatus"
+                                  Variant="Variant.Text" Size="ButtonSize.Small">
+                    </RadzenButton>
+                </End>
+            </RadzenFormField>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="0.1rem" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text=@resLocalizer.GetString("msgAccessTitle") Variant="Radzen.Variant.Outlined" Style="width: 100%" class="rz-p-2 rz-mt-0">
+                <Start>
+                    <RadzenIcon Icon="passkey" />
+                </Start>
+                <ChildContent>
+                    <RadzenTextBox @bind-Value="@user.accessCode" Style="width: 100%" Visible="@showAccess" />
+                    <RadzenPassword @bind-Value="@user.accessCode" Style="width: 100%" Visible="@(!showAccess)" />
+                </ChildContent>
+                <End>
+                    <RadzenButton Icon="@(showAccess ? "visibility" : "visibility_off")" Click="ChangeAccessStatus" 
+                        Variant="Variant.Text" Size="ButtonSize.Small">
+                    </RadzenButton>
+                </End>
+            </RadzenFormField>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.1rem" Wrap="FlexWrap.Wrap" class="rz-mt-2">
+            <RadzenButton Click=@CheckCredentialAsync Icon="how_to_reg" Text=@resLocalizer.GetString("msgCheckCredential")
+                          ButtonStyle="ButtonStyle.Success" class="rz-border-radius-5 rz-shadow-4" style="width: 260px" IsBusy=@isBusy />
+        </RadzenStack>
+    </RadzenColumn>
+    <RadzenColumn SizeMD="12" Visible="@showMessage" class="rz-mt-0 rz-p-0">
+        <RadzenCard>
+            <RadzenAlert Shade="Radzen.Shade.Dark" Variant="Radzen.Variant.Filled" Size="Radzen.AlertSize.Medium"
+                         AlertStyle="Radzen.AlertStyle.Danger" class="rz-p-0">
+                @errorMessage
+            </RadzenAlert>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
+
+@code{
+
+    private bool showPIC = false;
+    private bool showAccess = false;
+    private bool showMessage = false;
+    private bool isBusy = false;
+
+    protected string errorMessage { get; set; } = default!;
+
+    private UserLoginRequest user = new UserLoginRequest
+        {
+            picCode = "arcanjo@unasoft.com.br",
+            accessCode = "@Archie147+",
+            domainReference = 1,
+            profileReference = 1
+        };
+
+    void ChangeAccessStatus()
+    {
+        showAccess = !showAccess;
+    }
+    void ChangePICStatus()
+    {
+        showPIC = !showPIC;
+    }
+
+    async Task CheckCredentialAsync()
+    {
+        isBusy = true;
+        showMessage = false;
+
+        var userAccess = await userRepository.CheckCredential(user);
+        if (userAccess.IsOk == true)
+        {
+            navigation.NavigateTo("/");
+            isBusy = false;
+            return;
+        }
+        ShowMessage(userAccess.MessageKey);
+        isBusy = false;
+        //StateHasChanged();
+    }
+
+    void ShowMessage(string messageKey)
+    {   
+        errorMessage = resMessage.GetString(messageKey);
+        showMessage = true;
+    }
+}
